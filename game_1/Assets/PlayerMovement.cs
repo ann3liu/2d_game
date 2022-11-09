@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+
+    public Camera sceneCamera;
     public float moveSpeed;
 
     public Rigidbody2D rb2d;
+    public Weapon weapon;
 
     private Vector2 moveDirection;
+
+    private Vector2 mousePosition;
 
     // Update is called once per frame
     void Update()
@@ -28,11 +33,23 @@ public class PlayerMovement : MonoBehaviour
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveY = Input.GetAxisRaw("Vertical");
 
-        moveDirection = new Vector2(moveX, moveY); //come back to this
+        if(Input.GetKeyDown(KeyCode.X))
+        {
+            weapon.Fire();
+        }
+
+        moveDirection = new Vector2(moveX, moveY).normalized; 
+        mousePosition = sceneCamera.ScreenToWorldPoint(Input.mousePosition);
+
     }
 
     void Move()
     {
         rb2d.velocity = new Vector2(moveDirection.x * moveSpeed, moveDirection.y * moveSpeed);
+
+        //rotate player to follow mouse
+        Vector2 aimDirection = mousePosition - rb2d.position;
+        float aimAngle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg - 90f;
+        rb2d.rotation = aimAngle; 
     }
 }

@@ -7,13 +7,16 @@ public class bullet : MonoBehaviour
 
     public Rigidbody2D rb2d;
     
-    void Start()
+    public void OnTriggerEnter2D(Collider2D other)
     {
-        
-    }
-
-    void Update()
-    {
-        
+        switch(other.gameObject.tag)
+        {
+            case "Wall":
+            Destroy(gameObject);
+            break;
+            //case "Enemy":
+            //other.GameObject.GetComponent<MyEnemyScript>().TakeDamage();
+            //break;
+        }
     }
 }
